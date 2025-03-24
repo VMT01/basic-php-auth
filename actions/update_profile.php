@@ -1,15 +1,16 @@
 <?php
 
-require_once "./constants/routing.php";
-require_once "./shared/routing.php";
-require_once  "./database.php";
+require_once __DIR__ . "/../config/database.php";
+require_once __DIR__ . "/../constants/routing.php";
+require_once __DIR__ . "/../constants/session.php";
+require_once __DIR__ . "/../shared/routing.php";
 
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = isset($_POST["username"]) ? trim(htmlspecialchars($_POST["username"])) : null;
     $email = isset($_POST["email"]) ? trim(htmlspecialchars($_POST["email"])) : null;
-    $user_id = $_SESSION["user"]["id"];
+    $user_id = $_SESSION[USER][ID];
     $is_updated = false;
 
     try {
@@ -24,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $stmt = $pdo->prepare("UPDATE users SET username = ? where id = ?");
             $stmt->execute([$username, $user_id]);
-            $_SESSION["user"]["username"] = $username;
+            $_SESSION[USER][USERNAME] = $username;
             $is_updated = true;
         }
 
@@ -37,22 +38,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $stmt = $pdo->prepare("UPDATE users SET email = ? where id = ?");
             $stmt->execute([$email, $user_id]);
-            $_SESSION["user"]["email"] = $email;
+            $_SESSION[USER][EMAIL] = $email;
             $is_updated = true;
         }
 
         $pdo->commit();
 
         if ($is_updated) {
-            $_SESSION["success"] = "Profile info updated successfully";
+            $_SESSION[SUCCESS] = "Profile info updated successfully";
         }
-    } catch (PDOException $e) {
+    } catch (Throwable $e) {
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
         }
 
-        $_SESSION["error"] = $e->getMessage();
+        $_SESSION[ERROR] = $e->getMessage();
+    } finally {
+        redirect(PROFILE);
     }
-
-    redirect(PROFILE);
 }

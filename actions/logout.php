@@ -1,7 +1,7 @@
 <?php
 
-require_once "./constants/routing.php";
-require_once "./shared/routing.php";
+require_once __DIR__ . "/../constants/routing.php";
+require_once __DIR__ . "/../shared/routing.php";
 
 session_start();
 

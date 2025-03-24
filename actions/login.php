@@ -1,8 +1,9 @@
 <?php
 
-require_once "./constants/routing.php";
-require_once "./shared/routing.php";
-require_once  "./database.php";
+require_once __DIR__ . "/../config/database.php";
+require_once __DIR__ . "/../constants/routing.php";
+require_once __DIR__ . "/../constants/session.php";
+require_once __DIR__ . "/../shared/routing.php";
 
 session_start();
 
@@ -20,10 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!empty($errors)) {
-        $_SESSION["error"] = $errors;
-        $_SESSION["form_data"] = [
-            "username" => $username,
-        ];
+        $_SESSION[ERROR] = $errors;
         redirect(LOGIN);
     }
 
@@ -33,29 +31,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$user) {
-            $_SESSION["error"] = "User not found";
-            $_SESSION["form_data"] = [
-                "username" => $username,
-            ];
+            $_SESSION[ERROR] = "User not found";
             redirect(LOGIN);
         }
 
         if (!password_verify($password, $user["password"])) {
-            $_SESSION["error"] = "Invalid username or password.";
-            $_SESSION["form_data"] = [
-                "username" => $username,
-            ];
+            $_SESSION[ERROR] = "Invalid username or password.";
             redirect(LOGIN);
         }
 
         session_regenerate_id(true);
-        $_SESSION["user"] = $user;
+        $_SESSION[USER] = $user;
         redirect(PROFILE);
     } catch (PDOException $e) {
-        $_SESSION["error"] = "An error occurred while trying to login: " . $err->getMessage() . ".";
-        $_SESSION["form_data"] = [
-            "username" => $username,
-        ];
+        $_SESSION[ERROR] = "An error occurred while trying to login: " . $err->getMessage() . ".";
         redirect(LOGIN);
     }
 }

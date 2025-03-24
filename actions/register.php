@@ -1,8 +1,9 @@
 <?php
 
-require_once "./constants/routing.php";
-require_once "./shared/routing.php";
-require_once  "./database.php";
+require_once __DIR__ . "/../config/database.php";
+require_once __DIR__ . "/../constants/routing.php";
+require_once __DIR__ . "/../constants/session.php.php";
+require_once __DIR__ . "/../shared/routing.php";
 
 session_start();
 
@@ -25,32 +26,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!empty($errors)) {
-        $_SESSION["error"] = $errors;
-        $_SESSION["form_data"] = [
-            "username" => $username,
-            "email" => $email
-        ];
+        $_SESSION[ERROR] = $errors;
         redirect(REGISTER);
     }
 
     try {
         $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
         $stmt->execute([$username, $email]);
+
+        // TODO: We can map this into class instead of native var
         $existed_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($existed_user) {
-            if ($existed_user["username"] === $username) {
+            if ($existed_user[USERNAME] === $username) {
                 $errors[] = "Account with this username existed.";
             }
-            if ($existed_user["email"] === $email) {
+            if ($existed_user[EMAIL] === $email) {
                 $errors[] = "Account with this email existed.";
             }
 
-            $_SESSION["error"] = $errors;
-            $_SESSION["form_data"] = [
-                "username" => $username,
-                "email" => $email
-            ];
+            $_SESSION[ERROR] = $errors;
             redirect(REGISTER);
         }
 
@@ -58,14 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
         $stmt->execute([$username, $email, $hashed_password]);
 
-        $_SESSION["success"] = "Register success. Please login to access your profile.";
+        $_SESSION[SUCCESS] = "Register success. Please login to access your profile.";
         redirect(LOGIN);
     } catch (PDOException $e) {
-        $_SESSION["error"] = "An error occurred while trying to register: " . $e->getMessage() . ".";
-        $_SESSION["form_data"] = [
-            "username" => $username,
-            "email" => $email
-        ];
+        $_SESSION[ERROR] = "An error occurred while trying to register: " . $e->getMessage() . ".";
         redirect(REGISTER);
     }
 }

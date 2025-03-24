@@ -1,21 +1,20 @@
 <?php
 
-require_once "./constants/routing.php";
-require_once "./shared/routing.php";
+require_once __DIR__ . "/../constants/routing.php";
+require_once __DIR__ . "/../constants/session.php";
+require_once __DIR__ . "/../shared/routing.php";
 
 session_start();
 
-$user = $_SESSION["user"];
+$user = $_SESSION[USER];
 if (!$user) {
     redirect(LOGIN);
 }
 
-
-$error = $_SESSION["error"];
-unset($_SESSION["error"]);
-
-$status = $_SESSION["status"];
-unset($_SESSION["status"]);
+$error = $_SESSION[ERROR] ?? null;
+$status = $_SESSION[SUCCESS] ?? null;
+unset($_SESSION[ERROR]);
+unset($_SESSION[SUCCESS]);
 
 ?>
 
@@ -31,7 +30,7 @@ unset($_SESSION["status"]);
 <body>
     <header style="display: flex; justify-content: space-between; align-items: center;">
         <h2>Profile Page</h2>
-        <button><a href="<?php echo LOGOUT ?>">Logout</a></button>
+        <button><a href="<?php echo ACTION_LOGOUT ?>">Logout</a></button>
     </header>
     <hr>
 
