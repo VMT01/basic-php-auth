@@ -1,8 +1,12 @@
 <?php
 
 require_once __DIR__ . "/../config/database.php";
+
 require_once __DIR__ . "/../constants/routing.php";
-require_once __DIR__ . "/../constants/session.php.php";
+require_once __DIR__ . "/../constants/session.php";
+
+require_once __DIR__ . "/../entities/user.php";
+
 require_once __DIR__ . "/../shared/routing.php";
 
 session_start();
@@ -34,19 +38,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
         $stmt->execute([$username, $email]);
 
-        // TODO: We can map this into class instead of native var
-        $existed_user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($existed_user) {
-            if ($existed_user[USERNAME] === $username) {
-                $errors[] = "Account with this username existed.";
-            }
-            if ($existed_user[EMAIL] === $email) {
-                $errors[] = "Account with this email existed.";
+        if ($user) {
+            $user = new User($user);
+            if ($user->username() === $username) {
+                throw new Error("Account with this username existed.");
             }
 
-            $_SESSION[ERROR] = $errors;
-            redirect(REGISTER);
+            if ($user->email() === $email) {
+                throw new Error("Account with this email existed.");
+            }
         }
 
         $hashed_password = password_hash($password, PASSWORD_BCRYPT, ["cost" => 12]);
@@ -55,8 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $_SESSION[SUCCESS] = "Register success. Please login to access your profile.";
         redirect(LOGIN);
-    } catch (PDOException $e) {
-        $_SESSION[ERROR] = "An error occurred while trying to register: " . $e->getMessage() . ".";
+    } catch (Throwable $e) {
+        $_SESSION[ERROR] = $e->getMessage();
         redirect(REGISTER);
     }
 }

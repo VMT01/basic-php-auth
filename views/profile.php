@@ -2,6 +2,9 @@
 
 require_once __DIR__ . "/../constants/routing.php";
 require_once __DIR__ . "/../constants/session.php";
+
+require_once __DIR__ . '/../entities/user.php';
+
 require_once __DIR__ . "/../shared/routing.php";
 
 session_start();
@@ -40,8 +43,8 @@ unset($_SESSION[SUCCESS]);
         <p style="color: green;"><?php echo htmlspecialchars($status); ?></p>
     <?php endif; ?>
 
-    <p>Username: <?php echo htmlspecialchars($user["username"]); ?></p>
-    <p>Email: <?php echo htmlspecialchars($user["email"]); ?></p>
+    <p>Username: <?php echo htmlspecialchars($user->username()); ?></p>
+    <p>Email: <?php echo htmlspecialchars($user->email()); ?></p>
 
     <section>
         <form action="<?php echo ACTION_UPDATE_PROFILE ?>" method="post">

@@ -1,8 +1,12 @@
 <?php
 
 require_once __DIR__ . "/../config/database.php";
+
 require_once __DIR__ . "/../constants/routing.php";
 require_once __DIR__ . "/../constants/session.php";
+
+require_once __DIR__ . '/../entities/user.php';
+
 require_once __DIR__ . "/../shared/routing.php";
 
 session_start();
@@ -10,7 +14,7 @@ session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = isset($_POST["username"]) ? trim(htmlspecialchars($_POST["username"])) : null;
     $email = isset($_POST["email"]) ? trim(htmlspecialchars($_POST["email"])) : null;
-    $user_id = $_SESSION[USER][ID];
+    $user_id = $_SESSION[USER]->id();
     $is_updated = false;
 
     try {
@@ -25,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $stmt = $pdo->prepare("UPDATE users SET username = ? where id = ?");
             $stmt->execute([$username, $user_id]);
-            $_SESSION[USER][USERNAME] = $username;
+            $_SESSION[USER]->set_username($username);
             $is_updated = true;
         }
 
@@ -38,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $stmt = $pdo->prepare("UPDATE users SET email = ? where id = ?");
             $stmt->execute([$email, $user_id]);
-            $_SESSION[USER][EMAIL] = $email;
+            $_SESSION[USER]->set_email($email);
             $is_updated = true;
         }
 
