@@ -33,7 +33,7 @@ unset($_SESSION[SUCCESS]);
 <body>
     <header style="display: flex; justify-content: space-between; align-items: center;">
         <h2>Profile Page</h2>
-        <button><a href="<?php echo ACTION_LOGOUT ?>">Logout</a></button>
+        <button><a href="<?php echo ACTION_LOGOUT ?>">Logout</a></button> <!-- TODO: LOGOUT -->
     </header>
     <hr>
 

@@ -1,10 +1,9 @@
 <?php
 
 // Public routing
-const INDEX = "/";
-const LOGIN = "/login";
-const REGISTER = "/register";
-const PROFILE = "/profile";
+const LOGIN = "login";
+const REGISTER = "register";
+const PROFILE = "profile";
 
 // Action routing
 const ACTION_LOGIN = "/actions/login.php";
