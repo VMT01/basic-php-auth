@@ -190,7 +190,7 @@ $passwordUpdateForm = Form::builder()
             <div class="title">Thông tin tài khoản</div>
             <div class="box">
                 <ul>
-                    <li><i class="fa fa-cog"></i> Tài khoản</li>
+                    <li class="active"><i class="fa fa-cog"></i> Tài khoản</li>
                     <li data-action="openProfile"><i class="fa fa-pencil"></i> Chỉnh sửa</li>
                     <li data-action="openPassword"><i class="fa fa-info-circle "></i> Đổi mật khẩu</li>
                 </ul>

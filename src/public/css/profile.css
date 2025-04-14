@@ -156,6 +156,12 @@ a {
   color: #555;
 }
 
+.side-navbar .box ul li.active,
+.side-navbar .box ul li.active * {
+  color: #267cde;
+  font-weight: bold;
+}
+
 .side-navbar .box ul li:hover {
   background: rgba(255, 255, 255, 0.5);
 }
