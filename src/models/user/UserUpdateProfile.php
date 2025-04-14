@@ -6,6 +6,7 @@ use app\core\Application;
 use app\core\database\SQLBuilder;
 use app\entities\User;
 use app\models\Model;
+use RuntimeException;
 
 class UserUpdateProfile extends Model
 {
@@ -66,19 +67,20 @@ class UserUpdateProfile extends Model
 
         foreach (self::$ATTRIBUTES as $attribute) {
             if (empty($this->{$attribute}) || $this->{$attribute} === '' || $this->{$attribute} === []) continue;
-            if ($attribute === 'dob' && $this->dob !== date('Y-m-d', strtotime($this->user->dob))) {
-                $values['dob'] = $this->dob;
-                continue;
-            }
-            if ($attribute === 'avatar') {
-                $avatar = '/media/' . $this->user->id . '-' . basename($this->avatarPriv['name']);
-                $targetFile = Application::$ROOT_PATH . '/public' . $avatar;
-                move_uploaded_file($this->avatarPriv['tmp_name'], $targetFile);
-                $values['avatar'] = $avatar;
-                continue;
-            }
-            if ($attribute !== 'dob' && $this->user->{$attribute} !== $this->{$attribute}) {
-                $values[$attribute] = $this->{$attribute};
+
+            switch ($attribute) {
+                case 'dob':
+                    if ($this->dob !== date('Y-m-d', strtotime($this->user->dob))) $values['dob'] = $this->dob;
+                    break;
+                case 'avatar':
+                    $avatar = '/media/' . $this->user->id . '-' . basename($this->avatarPriv['name']);
+                    $targetFile = Application::$ROOT_PATH . '/public' . $avatar;
+                    if (!move_uploaded_file($this->avatarPriv['tmp_name'], $targetFile)) throw new RuntimeException("Failed to move uploaded avatar");
+                    $values['avatar'] = $avatar;
+                    break;
+                default:
+                    if ($this->user->{$attribute} !== $this->{$attribute}) $values[$attribute] = $this->{$attribute};
+                    break;
             }
         }
 

@@ -189,6 +189,10 @@ a {
   height: 100vh;
 }
 
+.modal-overlay.show {
+  display: flex;
+}
+
 .modal-container {
   background-color: white;
   width: 40%;
@@ -270,6 +274,11 @@ a {
 .profile-update-form,
 .password-update-form {
   display: none;
+}
+
+.profile-update-form.show,
+.password-update-form.show {
+  display: inline;
 }
 
 .password-update-form .input {

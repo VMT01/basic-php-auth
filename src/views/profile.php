@@ -121,7 +121,9 @@ $passwordUpdateForm = Form::builder()
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="/css/profile.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="/js/utils.js"></script>
+    <script src="/js/FlashMessage.js"></script>
+    <script src="/js/OverlayModal.js"></script>
+    <script src="/js/PasswordVisibilityManager.js"></script>
     <script src="/js/profile.js"></script>
 </head>
 
@@ -133,7 +135,7 @@ $passwordUpdateForm = Form::builder()
                     <p class="label">Tài khoản</p>
                     <p class="title"><?php echo $user->fullname; ?> · <?php echo $user->title ??  'Chưa nhập chức danh'; ?></p>
                 </div>
-                <button class="btn">Chỉnh sửa tài khoản</button>
+                <button class="btn" data-action="openProfile">Chỉnh sửa tài khoản</button>
             </div>
             <div class="detail">
                 <div class="uploadable">
@@ -189,8 +191,8 @@ $passwordUpdateForm = Form::builder()
             <div class="box">
                 <ul>
                     <li><i class="fa fa-cog"></i> Tài khoản</li>
-                    <li><i class="fa fa-pencil"></i> Chỉnh sửa</li>
-                    <li><i class="fa fa-info-circle "></i> Đổi mật khẩu</li>
+                    <li data-action="openProfile"><i class="fa fa-pencil"></i> Chỉnh sửa</li>
+                    <li data-action="openPassword"><i class="fa fa-info-circle "></i> Đổi mật khẩu</li>
                 </ul>
             </div>
             <button class="btn logout">Đăng xuất</button>
@@ -226,11 +228,13 @@ $passwordUpdateForm = Form::builder()
             </div>
         </div>
     </div>
+
     <script>
+        const flash = new FlashMessage();
         <?php if ($flashSuccess): ?>
-            showFlashMessage('<?php echo $flashSuccess ?>', 'success');
+            flash.show('<?php echo $flashSuccess ?>');
         <?php elseif ($flashError): ?>
-            showFlashMessage('<?php echo $flashError ?>', 'error');
+            flash.show('<?php echo $flashError ?>', 'error');
         <?php endif; ?>
     </script>
 </body>

@@ -19,8 +19,9 @@ $flashError = Application::$SESSION->getFlash('error');
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="/css/auth.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="/js/PasswordVisibilityManager.js"></script>
+    <script src="/js/FlashMessage.js"></script>
     <script src="/js/auth.js"></script>
-    <script src="/js/utils.js"></script>
 </head>
 
 <body>
@@ -35,10 +36,11 @@ $flashError = Application::$SESSION->getFlash('error');
     </div>
 
     <script>
+        const flash = new FlashMessage();
         <?php if ($flashSuccess): ?>
-            showFlashMessage('<?php echo $flashSuccess ?>', 'success');
+            flash.show('<?php echo $flashSuccess ?>');
         <?php elseif ($flashError): ?>
-            showFlashMessage('<?php echo $flashError ?>', 'error');
+            flash.show('<?php echo $flashError ?>', 'error');
         <?php endif; ?>
     </script>
 </body>
