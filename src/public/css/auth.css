@@ -1,0 +1,139 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto";
+}
+
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1 {
+  font-weight: 500;
+  font-size: 24px;
+  text-align: center;
+  padding: 35px 0px 8px 0px;
+}
+
+.bg-img {
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  background-image: url("https://static-gcdn.basecdn.net/account/image/background.png");
+  background-repeat: no-repeat;
+  background-size: 65% auto;
+  background-position: right center;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+}
+
+.container {
+  width: 35%;
+  height: 100%;
+  padding-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 0 50px;
+  position: relative;
+}
+
+.auth-logo {
+  text-align: center;
+}
+
+.auth-subtitle {
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #eee;
+}
+
+.auth-form {
+  padding: 30px 0;
+}
+
+.auth-form .field {
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form .field .label {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.auth-form .field .label label {
+  padding-bottom: 10px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.auth-form .field .label div {
+  color: red;
+  font-size: 10px;
+}
+
+.auth-form .field .input {
+  position: relative;
+}
+
+.auth-form .field .input input {
+  width: 100%;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+  padding: 6px 8px;
+}
+
+.auth-form .field .input i {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-55%);
+  right: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.auth-submit-button {
+  width: 100%;
+  margin-top: 20px;
+
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  background-color: #267cde;
+  border: none;
+  padding: 11px 25px;
+  border-radius: 3px;
+
+  cursor: pointer;
+}
+
+.auth-choice {
+  position: absolute;
+  bottom: 50px;
+}

@@ -1,0 +1,9 @@
+{
+  "name": "thanhvu/basic-php-auth",
+  "autoload": {
+    "psr-4": {
+      "app\\": "src/"
+    }
+  },
+  "require": {}
+}

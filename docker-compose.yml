@@ -6,5 +6,19 @@ services:
       - "8080:80"
     volumes:
       - ./:/var/www
+    env_file: ".env"
     extra_hosts:
       - host.docker.internal:host-gateway
+
+  db:
+    image: "mysql:lts"
+    restart: "no"
+    env_file: ".env"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql-config.cnf:/etc/mysql/conf.d/config.cnf
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql-data:
