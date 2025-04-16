@@ -24,12 +24,11 @@ class UserUpdatePassword extends Model
             'new_password' => [
                 self::RULES['REQUIRED'],
                 self::RULES['COMPLEX'],
-                [self::RULES['MIN'], 'min' => 6],
-                [self::RULES['MAX'], 'max' => 20],
+                [self::RULES['RANGE'], 'min' => 6, 'max' => 20]
             ],
-            'password_confirm' => [
+            'confirm_password' => [
                 self::RULES['REQUIRED'],
-                [self::RULES['MATCH'], 'match' => 'new_password']
+                [self::RULES['MATCH'], 'match' => 'new_password', 'label' => 'mật khẩu mới']
             ],
         ];
         $this->user = Application::$SESSION->user;

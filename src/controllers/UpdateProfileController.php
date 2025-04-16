@@ -62,7 +62,14 @@ class UpdateProfileController extends Controller
 
         $userModel = new UserUpdatePassword();
         $userModel->loadData($body);
+
+        /** @var array<string, array<string, string>> $errors */
         $errors = $userModel->validate();
+        if (!password_verify($userModel->current_password, $user->password)) {
+            $errors['current_password'] = $errors['current_password'] ?? ['code' => 'PASSWORD_INCORRECT'];
+        } else if (password_verify($userModel->new_password, $user->password)) {
+            $errors['new_password'] = ['code' => 'PASSWORD_DUPLICATED'];
+        }
 
         if (!empty($errors)) {
             Application::$SESSION->set('updatePassword', ['model' => $userModel, 'error' => $errors]);
@@ -71,14 +78,12 @@ class UpdateProfileController extends Controller
         }
 
         try {
-            if (!password_verify($userModel->current_password, $user->password)) throw new \Error('Password is incorrect');
-            if (password_verify($userModel->new_password, $user->password)) throw new \Error('Password cannot be the same as old one');
-
             $userModel->updatePassword();
             Application::$SESSION->setFlash('success', 'Cập nhật mật khẩu thành công');
+            Application::$SESSION->logout();
+            Application::$RESPONSE->redirect('/login');
         } catch (\Throwable $error) {
             Application::$SESSION->setFlash('error', $error->getMessage());
-        } finally {
             Application::$RESPONSE->redirect('/profile');
         }
     }

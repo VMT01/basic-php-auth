@@ -30,7 +30,7 @@ class RegisterController extends Controller
 
         try {
             $userModel->register();
-            Application::$SESSION->setFlash('success', 'Register success. Login to finish action.');
+            Application::$SESSION->setFlash('success', 'Đăng ký tài khoản thành công');
             Application::$RESPONSE->redirect('/login');
         } catch (\Throwable $error) {
             Application::$SESSION->setFlash('error', $error->getMessage());

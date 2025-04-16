@@ -28,6 +28,7 @@ class UserRegisterModel extends Model
             ],
             'email' => [
                 self::RULES['REQUIRED'],
+                [self::RULES['RANGE'], 'max' => 255],
                 self::RULES['EMAIL'],
                 [self::RULES['UNIQUE'], 'class' => User::class]
             ],
@@ -42,7 +43,7 @@ class UserRegisterModel extends Model
             ],
             'password_confirm' => [
                 self::RULES['REQUIRED'],
-                [self::RULES['MATCH'], 'match' => 'password']
+                [self::RULES['MATCH'], 'match' => 'password', 'label' => 'mật khẩu']
             ],
         ];
 
@@ -54,34 +55,9 @@ class UserRegisterModel extends Model
         $this->password_confirm = '';
     }
 
-    public function fullname()
+    public function __get($name)
     {
-        return $this->fullname;
-    }
-
-    public function dob()
-    {
-        return $this->dob;
-    }
-
-    public function email()
-    {
-        return $this->email;
-    }
-
-    public function phone()
-    {
-        return $this->phone;
-    }
-
-    public function password()
-    {
-        return $this->password;
-    }
-
-    public function password_confirm()
-    {
-        return $this->password_confirm;
+        return $this->{$name};
     }
 
     public function register()

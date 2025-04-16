@@ -103,7 +103,9 @@ abstract class Validator
     {
         if (empty($value)) return true;
 
-        $length = strlen($value);
+        $value = mb_convert_encoding($value, 'UTF-8', mb_detect_encoding($value, 'UTF-8, ASCII', true));
+        $length = mb_strlen($value, 'UTF-8');
+
         if (isset($params['min']) && $length < $params['min']) {
             $this->errors[$attribute] = ['code' => 'FORM_RANGE_MIN', 'min' => $params['min']];
             return false;
@@ -143,7 +145,7 @@ abstract class Validator
      *
      * @param string $attribute Field name
      * @param null|string $value Field value
-     * @param array{match:string} $params Field to match against
+     * @param array{match:string,label:string} $params Field to match against
      */
     private function validate_match($attribute, $value, $params)
     {
@@ -154,7 +156,7 @@ abstract class Validator
         ) return true;
         $this->errors[$attribute] = [
             'code' => 'FORM_MATCH',
-            'match' => $params['match']
+            'match' => $params['label']
         ];
         return false;
     }

@@ -6,7 +6,6 @@ use app\core\Application;
 use app\core\database\SQLBuilder;
 use app\entities\User;
 use app\models\Model;
-use RuntimeException;
 
 class UserUpdateProfile extends Model
 {
@@ -14,13 +13,12 @@ class UserUpdateProfile extends Model
     private readonly User $user;
     private readonly string $email;
     private readonly string $username;
-    /**
-     * @var array{name: string,full_path: string,type: string,tmp_name: string,error: bool,size: int} $avatarPriv
-     */
-    private array $avatarPriv;
 
     protected string $fullname;
     protected string $title;
+    /**
+     * @var null|array{name: string,full_path: string,type: string,tmp_name: string,error: bool,size: int} $avatar
+     */
     protected ?array $avatar = null;
     protected string $dob;
     protected string $phone;
@@ -43,7 +41,7 @@ class UserUpdateProfile extends Model
                 [self::RULES['UNIQUE'], 'class' => User::class]
             ],
             'address' => [
-                [self::RULES['RANGE'], 'max' => 255],
+                [self::RULES['RANGE'], 'max' => 300],
             ],
         ];
 
@@ -75,14 +73,22 @@ class UserUpdateProfile extends Model
                     if ($this->dob !== date('Y-m-d', strtotime($this->user->dob))) $values['dob'] = $this->dob;
                     break;
                 case 'avatar':
-                    $avatar = '/media/' . $this->user->id . '-' . basename($this->avatarPriv['name']);
+                    if (empty($this->avatar)) break;
+                    $avatar = '/media/' . $this->user->id . '-' . basename($this->avatar['name']);
                     $targetFile = Application::$ROOT_PATH . '/public' . $avatar;
-                    move_uploaded_file($this->avatarPriv['tmp_name'], $targetFile);
+                    move_uploaded_file($this->avatar['tmp_name'], $targetFile);
                     $values['avatar'] = $avatar;
                     break;
                 default:
-                    if ($this->user->{$attribute} !== $this->{$attribute}) $values[$attribute] = $this->{$attribute};
-                    break;
+                    $userValue = $this->user->{$attribute} ?? null;
+                    $currentValue = $this->{$attribute} ?? '';
+
+                    if (empty($userValue) && $currentValue === '') break;
+                    if ($currentValue === '') {
+                        $values[$attribute] = null;
+                    } else if (empty($userValue) || $userValue !== $currentValue) {
+                        $values[$attribute] = $currentValue;  // Setting new or changed value
+                    }
             }
         }
 

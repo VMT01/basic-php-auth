@@ -40,7 +40,7 @@ $flashError = Application::$SESSION->getFlash('error');
         <?php if ($flashSuccess): ?>
             flash.show('<?php echo $flashSuccess ?>');
         <?php elseif ($flashError): ?>
-            flash.show('<?php echo $flashError ?>', 'error');
+            flash.show('<?php echo json_encode($flashError) ?>', 'error');
         <?php endif; ?>
     </script>
 </body>

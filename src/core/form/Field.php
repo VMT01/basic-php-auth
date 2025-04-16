@@ -17,6 +17,8 @@ class Field
         'FORM_IMAGE_INVALID' => 'Tệp đã gửi không phải là ảnh',
         'FORM_IMAGE_TYPE' => 'Ảnh chỉ chấp nhận kiểu {types}',
         'FORM_IMAGE_SIZE' => 'Ảnh không được vượt quá {maxSize}MB',
+        'PASSWORD_INCORRECT' => 'Mật khẩu không chính xác',
+        'PASSWORD_DUPLICATED' => 'Mật khẩu mới không thể trùng với mật khẩu cũ'
     ];
 
     private ?string $label = null;

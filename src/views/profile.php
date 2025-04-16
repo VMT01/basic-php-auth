@@ -26,6 +26,7 @@ $imgUploadForm = Form::builder()
 
 $updateProfile = Application::$SESSION->get('updateProfile');
 unset($_SESSION['updateProfile']);
+$openProfile = isset($updateProfile);
 $profileUpdateForm = Form::builder()
     ->with_attributes([
         'method' => 'post',
@@ -80,6 +81,7 @@ $profileUpdateForm = Form::builder()
 
 $updatePassword = Application::$SESSION->get('updatePassword');
 unset($_SESSION['updatePassword']);
+$openPassword = isset($updatePassword);
 $passwordUpdateForm = Form::builder()
     ->with_attributes([
         'method' => 'post',
@@ -92,16 +94,22 @@ $passwordUpdateForm = Form::builder()
         [
             [
                 'label' => 'Mật khẩu hiện tại',
+                'required' => true,
+                'reset' => true,
                 'hidden' => true,
                 'attributes' => ['name' => 'current_password', 'placeholder' => 'Mật khẩu hiện tại', 'type' => 'password']
             ],
             [
                 'label' => 'Mật khẩu mới',
+                'required' => true,
+                'reset' => true,
                 'hidden' => true,
                 'attributes' => ['name' => 'new_password', 'placeholder' => 'Mật khẩu mới', 'type' => 'password']
             ],
             [
                 'label' => 'Nhập lại mật khẩu mới',
+                'required' => true,
+                'reset' => true,
                 'hidden' => true,
                 'attributes' => ['name' => 'confirm_password', 'placeholder' => 'Nhập lại mật khẩu mới', 'type' => 'password']
             ],
@@ -109,7 +117,6 @@ $passwordUpdateForm = Form::builder()
         ['class' => 'field']
     )
     ->build();
-
 ?>
 
 <!DOCTYPE html>
@@ -202,27 +209,24 @@ $passwordUpdateForm = Form::builder()
             <button class="btn logout">Đăng xuất</button>
         </div>
     </div>
-    <div
-        class="modal-overlay"
-        style="<?php if (($updateProfile && $updateProfile['error']) || ($updatePassword && $updatePassword['error'])): echo 'display: flex;';
-                endif; ?>
-            ">
+    <div class="modal-overlay <?php if ($openProfile || $openPassword): echo 'show'; ?> 
+    <?php endif ?>">
         <div class="modal-container">
             <div class="modal-header">
                 <h2 class="modal-title">Chỉnh sửa thông tin cá nhân</h2>
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="profile-update-form" style="<?php if ($updateProfile && $updateProfile['error']): echo 'display: inline;';
-                                                        endif; ?>">
+                <div class="profile-update-form <?php if ($openProfile): echo 'show'; ?>
+                <?php endif ?>">
                     <div><?php echo $profileUpdateForm; ?></div>
                     <div class="modal-footer">
                         <button class="btn btn-cancel">Hủy</button>
                         <button class="btn btn-confirm">Xác nhận</button>
                     </div>
                 </div>
-                <div class="password-update-form" style="<?php if ($updatePassword && $updatePassword['error']): echo 'display: inline;';
-                                                            endif; ?>">
+                <div class="password-update-form <?php if ($openPassword): echo 'show'; ?>
+                <?php endif ?>">
                     <div><?php echo $passwordUpdateForm; ?></div>
                     <div class=" modal-footer">
                         <button class="btn btn-cancel">Bỏ qua</button>

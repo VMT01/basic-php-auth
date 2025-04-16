@@ -13,7 +13,7 @@ class Model extends Validator
     {
         foreach ($data as $key => $value) {
             if (property_exists($this, $key)) {
-                $this->{$key} = is_string($value) ? trim(htmlspecialchars($value)) : $value;
+                $this->{$key} = $value;
             }
         }
     }

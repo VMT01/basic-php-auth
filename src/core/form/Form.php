@@ -89,14 +89,17 @@ class Form
             $name = $attributes['name'];
             if ($name === null) continue;
 
+            $modelValue = $this->model?->{$name};
             $rawValue = htmlspecialchars_decode(
-                (is_array($this->model?->{$name}) ? null : $this->model?->{$name})
+                (!is_array($modelValue) ? $modelValue : null)
                     ?? $this->user?->{$name}
                     ?? ''
             );
 
             if (isset($attributes['type']) && $attributes['type'] === 'date') {
-                $attributes['value'] = date('Y-m-d', strtotime($rawValue));
+                $attributes['value'] = $rawValue ?
+                    date('Y-m-d', strtotime($rawValue)) :
+                    date('Y-m-d');
             } else {
                 $attributes['value'] = $rawValue;
             }

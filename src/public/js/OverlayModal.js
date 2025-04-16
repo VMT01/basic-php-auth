@@ -8,7 +8,10 @@ class OverlayModal {
     $(document).on(
       "click",
       ".modal-overlay .close-modal, .modal-overlay .btn-cancel",
-      () => this.closeModal(),
+      () => {
+        console.log("CLICK CLOSE");
+        this.closeModal();
+      },
     );
 
     // Close if clicking outside content
