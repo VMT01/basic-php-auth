@@ -19,29 +19,31 @@ class UserUpdateProfile extends Model
      */
     private array $avatarPriv;
 
-    protected string $fullname = '';
-    protected string $title = '';
-    protected string $avatar = '';
-    protected string $dob = '';
-    protected string $phone = '';
-    protected string $address = '';
+    protected string $fullname;
+    protected string $title;
+    protected ?array $avatar = null;
+    protected string $dob;
+    protected string $phone;
+    protected string $address;
 
     public function __construct()
     {
         $this->rules = [
             'fullname' => [
-                [self::RULES['MIN'], 'min' => 10],
-                [self::RULES['MAX'], 'max' => 50],
+                [self::RULES['RANGE'], 'min' => 10, 'max' => 50],
             ],
             'title' => [
-                [self::RULES['MAX'], 'max' => 50],
+                [self::RULES['RANGE'], 'max' => 50],
+            ],
+            'avatar' => [
+                self::RULES['IMAGE']
             ],
             'phone' => [
                 self::RULES['PHONE'],
                 [self::RULES['UNIQUE'], 'class' => User::class]
             ],
             'address' => [
-                [self::RULES['MAX'], 'max' => 500],
+                [self::RULES['RANGE'], 'max' => 255],
             ],
         ];
 
@@ -66,7 +68,7 @@ class UserUpdateProfile extends Model
         $values = [];
 
         foreach (self::$ATTRIBUTES as $attribute) {
-            if (empty($this->{$attribute}) || $this->{$attribute} === '' || $this->{$attribute} === []) continue;
+            if (!isset($this->{$attribute})) continue;
 
             switch ($attribute) {
                 case 'dob':
@@ -75,7 +77,7 @@ class UserUpdateProfile extends Model
                 case 'avatar':
                     $avatar = '/media/' . $this->user->id . '-' . basename($this->avatarPriv['name']);
                     $targetFile = Application::$ROOT_PATH . '/public' . $avatar;
-                    if (!move_uploaded_file($this->avatarPriv['tmp_name'], $targetFile)) throw new RuntimeException("Failed to move uploaded avatar");
+                    move_uploaded_file($this->avatarPriv['tmp_name'], $targetFile);
                     $values['avatar'] = $avatar;
                     break;
                 default:
@@ -84,7 +86,7 @@ class UserUpdateProfile extends Model
             }
         }
 
-        if (empty($values)) throw new \Error('No field to update');
+        if (empty($values)) throw new \Error('Không có trường nào để cập nhật');
 
         $SQL = SQLBuilder::builder()
             ->update(array_keys($values))

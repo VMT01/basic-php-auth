@@ -13,6 +13,7 @@ $loginForm = Form::builder()
         [
             [
                 'label' => 'Email',
+                'required' => true,
                 'attributes' => [
                     'name' => 'email',
                     'type' => 'email',
@@ -20,6 +21,7 @@ $loginForm = Form::builder()
             ],
             [
                 'label' => 'Mật khẩu',
+                'required' => true,
                 'reset' => true,
                 'hidden' => true,
                 'attributes' => [

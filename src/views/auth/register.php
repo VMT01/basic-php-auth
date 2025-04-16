@@ -13,12 +13,14 @@ $registerForm = Form::builder()
         [
             [
                 'label' => 'Họ và tên',
+                'required' => true,
                 'attributes' => [
                     'name' => 'fullname'
                 ]
             ],
             [
                 'label' => 'Ngày sinh',
+                'required' => true,
                 'attributes' => [
                     'name' => 'dob',
                     'type' => 'date'
@@ -26,6 +28,7 @@ $registerForm = Form::builder()
             ],
             [
                 'label' => 'Email',
+                'required' => true,
                 'attributes' => [
                     'name' => 'email',
                     'type' => 'email'
@@ -39,6 +42,7 @@ $registerForm = Form::builder()
             ],
             [
                 'label' => 'Mật khẩu',
+                'required' => true,
                 'reset' => true,
                 'hidden' => true,
                 'attributes' => [
@@ -48,6 +52,7 @@ $registerForm = Form::builder()
             ],
             [
                 'label' => 'Xác nhận mật khẩu',
+                'required' => true,
                 'reset' => true,
                 'hidden' => true,
                 'attributes' => [

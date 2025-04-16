@@ -21,8 +21,7 @@ class UserRegisterModel extends Model
         $this->rules = [
             'fullname' => [
                 self::RULES['REQUIRED'],
-                [self::RULES['MIN'], 'min' => 10],
-                [self::RULES['MAX'], 'max' => 50],
+                [self::RULES['RANGE'], 'min' => 1, 'max' => 50]
             ],
             'dob' => [
                 self::RULES['REQUIRED']
@@ -39,22 +38,53 @@ class UserRegisterModel extends Model
             'password' => [
                 self::RULES['REQUIRED'],
                 self::RULES['COMPLEX'],
-                [self::RULES['MIN'], 'min' => 6],
-                [self::RULES['MAX'], 'max' => 20],
+                [self::RULES['RANGE'], 'min' => 6, 'max' => 20]
             ],
             'password_confirm' => [
                 self::RULES['REQUIRED'],
                 [self::RULES['MATCH'], 'match' => 'password']
             ],
         ];
+
+        $this->fullname = '';
+        $this->dob = date('Y-m-d');
+        $this->email = '';
+        $this->phone = null;
+        $this->password = '';
+        $this->password_confirm = '';
     }
 
-    public function __get($name)
+    public function fullname()
     {
-        return $this->$name;
+        return $this->fullname;
     }
 
-    public function register(): void
+    public function dob()
+    {
+        return $this->dob;
+    }
+
+    public function email()
+    {
+        return $this->email;
+    }
+
+    public function phone()
+    {
+        return $this->phone;
+    }
+
+    public function password()
+    {
+        return $this->password;
+    }
+
+    public function password_confirm()
+    {
+        return $this->password_confirm;
+    }
+
+    public function register()
     {
         $fields = ['email', 'fullname', 'password', 'username', 'dob'];
         $values = [
@@ -79,7 +109,7 @@ class UserRegisterModel extends Model
         $statement->execute($values);
     }
 
-    private function buildUsername(): string
+    private function buildUsername()
     {
         $nameParts = explode(' ', strtolower($this->normalize($this->fullname)));
         $username = '@' . end($nameParts) . $nameParts[0];

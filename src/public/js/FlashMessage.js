@@ -41,6 +41,7 @@ class FlashMessage {
   }
 
   show(message, type = "success", duration = 3000) {
+    message = formatMessage(message);
     const $msg = $('<div class="flash-message"></div>')
       .addClass(type)
       .text(message)
@@ -53,5 +54,28 @@ class FlashMessage {
     setTimeout(() => {
       $msg.animate({ opacity: 0 }, 300, () => $msg.remove());
     }, duration);
+  }
+}
+
+function formatMessage(message) {
+  const MESSAGES = {
+    FORM_IMAGE_UPLOAD: "Đã có lỗi khi gửi ảnh",
+    FORM_IMAGE_INVALID: "Tệp đã gửi không phải là ảnh",
+    FORM_IMAGE_TYPE: "Ảnh chỉ chấp nhận kiểu {types}",
+    FORM_IMAGE_SIZE: "Ảnh không được vượt quá {maxSize}MB",
+  };
+
+  try {
+    const parsed = JSON.parse(message);
+    if (typeof parsed !== "object") return message.replaceAll('"', "");
+
+    const { code, ...placeholders } = parsed;
+    const template = MESSAGES[code] || "Lỗi không xác định";
+
+    return template.replace(/\{([^{}]+)\}/g, (match, key) => {
+      return placeholders[key] !== undefined ? placeholders[key] : match;
+    });
+  } catch (e) {
+    return message;
   }
 }

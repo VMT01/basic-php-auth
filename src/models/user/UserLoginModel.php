@@ -23,11 +23,14 @@ class UserLoginModel extends Model
                 self::RULES['REQUIRED'],
             ],
         ];
+
+        $this->email = '';
+        $this->password = '';
     }
 
     public function __get($name)
     {
-        return $this->$name;
+        return $this->{$name};
     }
 
     public function login(): int
@@ -42,8 +45,9 @@ class UserLoginModel extends Model
         /** @var ?User $user */
         $user = $statement->fetchObject(User::class);
 
-        if (!$user) throw new \Error('User does not exist with this email');
-        if (!password_verify($this->password, $user->password)) throw new \Error('Password is incorrect');
+        if (
+            !$user || !password_verify($this->password, $user->password)
+        ) throw new \Error('Email hoặc Mật khẩu không chính xác');
 
         return $user->id;
     }

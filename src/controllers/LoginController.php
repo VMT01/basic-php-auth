@@ -20,22 +20,22 @@ class LoginController extends Controller
 
     public function handleLogin(array $body): void
     {
-        $userModel = new UserLoginModel();
-        $userModel->loadData($body);
-        $errors = $userModel->validate();
+        $loginModel = new UserLoginModel();
+        $loginModel->loadData($body);
+        $errors = $loginModel->validate();
         if (!empty($errors)) {
-            $this->render(['model' => $userModel, 'errors' => ['form_error' => $errors]]);
+            $this->render(['model' => $loginModel, 'errors' => ['form_error' => $errors]]);
             return;
         }
 
         try {
-            $userId = $userModel->login();
+            $userId = $loginModel->login();
 
             Application::$SESSION->set('user', $userId);
             Application::$RESPONSE->redirect('/profile');
         } catch (\Throwable $error) {
             Application::$SESSION->setFlash('error', $error->getMessage());
-            $this->render(['model' => $userModel]);
+            $this->render(['model' => $loginModel]);
         }
     }
 }

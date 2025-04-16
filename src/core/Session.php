@@ -21,14 +21,20 @@ class Session
         $_SESSION[self::FLASH_KEY] = $flashMessages;
     }
 
-    /** @param 'success'|'error' $key */
-    public function setFlash(string $key, string $message): void
+    /**
+     * @param 'success'|'error' $key
+     * @param string|array<string, string> $message
+     */
+    public function setFlash($key, $message)
     {
         $_SESSION[self::FLASH_KEY][$key] = ['removed' => false, 'value' => $message];
     }
 
-    /** @param 'success'|'error' $key */
-    public function getFlash(string $key): mixed
+    /** 
+     * @param 'success'|'error' $key
+     * @return null|string|array<string, string>
+     */
+    public function getFlash($key)
     {
         return $_SESSION[self::FLASH_KEY][$key]['value'] ?? null;
     }

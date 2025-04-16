@@ -62,13 +62,20 @@ a {
   height: 100px;
   margin-right: 20px;
   position: relative;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+}
+
+.detail .uploadable:hover {
+  background: #eee;
 }
 
 .detail .uploadable img {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .detail .fullname {
@@ -85,6 +92,10 @@ a {
   margin-bottom: 6px;
 }
 
+.detail .grid-container {
+  max-width: 600px;
+}
+
 .detail .grid-container .info-item {
   padding-top: 8px;
   font-size: 14px;
@@ -98,6 +109,8 @@ a {
 }
 
 .detail .grid-container .info-item .value {
+  max-width: calc(100% - 110px);
+  word-wrap: break-word;
   color: #000;
 }
 

@@ -39,14 +39,17 @@ $profileUpdateForm = Form::builder()
         [
             [
                 'label' => 'Tên của bạn',
+                'required' => true,
                 'attributes' => ['name' => 'fullname', 'placeholder' => 'Tên của bạn']
             ],
             [
                 'label' => 'Email',
+                'required' => true,
                 'attributes' => ['name' => 'email', 'disabled' => 'true']
             ],
             [
                 'label' => 'Username',
+                'required' => true,
                 'attributes' => ['name' => 'username', 'disabled' => 'true']
             ],
             [
@@ -59,6 +62,7 @@ $profileUpdateForm = Form::builder()
             ],
             [
                 'label' => 'Ngày tháng năm sinh',
+                'required' => true,
                 'attributes' => ['name' => 'dob', 'type' => 'date']
             ],
             [
@@ -234,7 +238,7 @@ $passwordUpdateForm = Form::builder()
         <?php if ($flashSuccess): ?>
             flash.show('<?php echo $flashSuccess ?>');
         <?php elseif ($flashError): ?>
-            flash.show('<?php echo $flashError ?>', 'error');
+            flash.show('<?php echo json_encode($flashError) ?>', 'error');
         <?php endif; ?>
     </script>
 </body>

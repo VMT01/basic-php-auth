@@ -9,18 +9,23 @@ use app\models\user\UserUpdateProfile;
 
 class UpdateProfileController extends Controller
 {
-    public function updateAvatar(): void
+    public function updateAvatar()
     {
-        if (empty($_FILES['avatar']) || $_FILES['avatar']['size'] === 0) return;
+        if (empty($_FILES['avatar']) || $_FILES['avatar']['error'] !== 0) return;
 
         $userModel = new UserUpdateAvatar();
         $userModel->loadData($_FILES);
         $errors = $userModel->validate();
 
+        if (!empty($errors)) {
+            Application::$SESSION->setFlash('error', $errors['avatar']);
+            Application::$RESPONSE->redirect('/profile');
+            return;
+        }
+
         try {
-            if (!empty($errors)) throw new \Error($errors[0]);
             $userModel->updateAvatar();
-            Application::$SESSION->setFlash('success', 'Update avatar successfully');
+            Application::$SESSION->setFlash('success', 'Cập nhật ảnh đại diện thành công');
         } catch (\Throwable $error) {
             Application::$SESSION->setFlash('error', $error->getMessage());
         } finally {
@@ -32,15 +37,8 @@ class UpdateProfileController extends Controller
     {
         $userModel = new UserUpdateProfile();
         $userModel->loadData($body);
+        $userModel->avatar = $_FILES['avatar']['size'] !== 0 ? $_FILES['avatar'] : null;
         $errors = $userModel->validate();
-
-        if (isset($_FILES['avatar']) && $_FILES['avatar']['size'] !== 0) {
-            $avatarModel = new UserUpdateAvatar();
-            $avatarModel->loadData($_FILES);
-            $userModel->avatarPriv = $avatarModel->avatar;
-            $avatarErrors = $avatarModel->validate();
-            $errors = array_merge($errors, $avatarErrors);
-        }
 
         if (!empty($errors)) {
             Application::$SESSION->set('updateProfile', ['model' => $userModel, 'error' => $errors]);
@@ -50,7 +48,7 @@ class UpdateProfileController extends Controller
 
         try {
             $userModel->updateProfile();
-            Application::$SESSION->setFlash('success', 'Update profile successfully');
+            Application::$SESSION->setFlash('success', 'Cập nhật thông tin cá nhân thành công');
         } catch (\Throwable $error) {
             Application::$SESSION->setFlash('error', $error->getMessage());
         } finally {
@@ -77,7 +75,7 @@ class UpdateProfileController extends Controller
             if (password_verify($userModel->new_password, $user->password)) throw new \Error('Password cannot be the same as old one');
 
             $userModel->updatePassword();
-            Application::$SESSION->setFlash('success', 'Update password successfully');
+            Application::$SESSION->setFlash('success', 'Cập nhật mật khẩu thành công');
         } catch (\Throwable $error) {
             Application::$SESSION->setFlash('error', $error->getMessage());
         } finally {
